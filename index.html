@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hướng Dẫn Thêm Chỉ Báo TradingView</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0f1117;
+      color: #e0e0e0;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+
+    h1 {
+      color: #00bcd4;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 40px;
+      margin-bottom: 8px;
+      color: #ffc107;
+    }
+
+    .steps {
+      background-color: #1e1e1e;
+      border-left: 4px solid #00bcd4;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 32px;
+    }
+
+    .steps p {
+      margin: 10px 0;
+    }
+
+    .steps img {
+      max-width: 100%;
+      border-radius: 6px;
+      margin-top: 8px;
+      margin-bottom: 16px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.6);
+    }
+
+    .code-block {
+      position: relative;
+      background: #1e1e1e;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .code-block pre {
+      margin: 0;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      color: #dcdcdc;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #333;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background: #555;
+    }
+
+    .copied {
+      background: #4caf50 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✨ Hướng Dẫn Thêm Chỉ Báo Vào TradingView</h1>
+
+  <div class="steps">
+    <h2>🔧 Các Bước Thực Hiện</h2>
+    <p>1️⃣ Truy cập <strong>tradingview.com</strong> và đăng nhập tài khoản của bạn.</p>
+    <img src="1.jpg" alt="Bước 1 - Truy cập TradingView">
+
+    <p>2️⃣ Mở một biểu đồ bất kỳ (ví dụ BTCUSDT, VNINDEX,...)</p>
+    <p>3️⃣ Bấm vào mục <strong>Pine Editor</strong> (nằm dưới biểu đồ).</p>
+    <img src="2.jpg" alt="Bước 2 - Mở Pine Editor">
+
+    <p>4️⃣ Xoá hết code cũ trong đó và dán đoạn mã chỉ báo bên dưới.</p>
+    <p>5️⃣ Bấm nút <strong>Add to Chart</strong> (hoặc Ctrl + Enter).</p>
+    <p>6️⃣ Chỉ báo sẽ hiển thị trên biểu đồ của bạn.</p>
+  </div>
+
+  <h2>🔵 EMA 200 by BmassK3</h2>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+    <pre>//@version=6
+indicator(title="EMA200 by BmassK3", shorttitle="EMA200 BmassK3", overlay=true)
+
+ema200 = ta.ema(close, 200)
+
+plot(ema200, color=color.blue, title="EMA 200", linewidth=3)</pre>
+  </div>
+
+  <h2>🔴 Stochastic X2 by BmassK3 (Customizable)</h2>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+    <pre>//@version=6
+indicator(title="Stochastic X2 by BmassK3 (Customizable)", shorttitle="Stoch x2 BmassK3", overlay=false)
+
+// --- Customizable Inputs for Stochastic Yellow ---
+k_yellow_len = input.int(14, title="%K Yellow Length", minval=1)
+k_yellow_smooth = input.int(3, title="%K Yellow Smoothing", minval=1)
+d_yellow_smooth = input.int(3, title="%D Yellow Smoothing", minval=1)
+
+// --- Stochastic Yellow Calculation ---
+k_yellow_raw = ta.stoch(close, high, low, k_yellow_len)
+k_yellow = ta.sma(k_yellow_raw, k_yellow_smooth)
+d_yellow = ta.sma(k_yellow, d_yellow_smooth)
+
+// --- Customizable Inputs for Stochastic Red ---
+k_red_len = input.int(5, title="%K Red Length", minval=1)
+k_red_smooth = input.int(3, title="%K Red Smoothing", minval=1)
+d_red_smooth = input.int(3, title="%D Red Smoothing", minval=1)
+
+// --- Stochastic Red Calculation ---
+k_red_raw = ta.stoch(close, high, low, k_red_len)
+k_red = ta.sma(k_red_raw, k_red_smooth)
+d_red = ta.sma(k_red, d_red_smooth)
+
+// --- Plot ---
+plot(k_yellow, title="%K Yellow", color=color.rgb(255, 193, 7), linewidth=1)
+plot(d_yellow, title="%D Yellow", color=color.rgb(255, 152, 0), linewidth=2)
+
+plot(k_red, title="%K Red", color=color.rgb(244, 67, 54), linewidth=1)
+plot(d_red, title="%D Red", color=color.rgb(211, 47, 47), linewidth=2)
+
+// --- Guide lines ---
+hline(80, "Overbought", color=color.gray)
+hline(50, "Middle", color=color.new(color.gray, 50))
+hline(20, "Oversold", color=color.gray)</pre>
+  </div>
+
+  <script>
+    function copyCode(button) {
+      const code = button.nextElementSibling.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        button.textContent = "✅ Copied!";
+        button.classList.add("copied");
+        setTimeout(() => {
+          button.textContent = "📋 Copy";
+          button.classList.remove("copied");
+        }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>
